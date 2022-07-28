@@ -1,3 +1,5 @@
+import 'dart:html';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:bloc/bloc.dart';
@@ -28,10 +30,7 @@ class ThetaBloc extends Bloc<ThetaEvent, ThetaState> {
           await Future.delayed(Duration(milliseconds: 200));
           print(state.cameraState);
           emit(ThetaState(
-              inProgress: true,
-              message: response.body,
-              id: id,
-              cameraState: state.cameraState));
+              message: response.body, id: id, cameraState: state.cameraState));
         }
       }
       add(GetFileEvent());
@@ -76,14 +75,15 @@ class ThetaBloc extends Bloc<ThetaEvent, ThetaState> {
     on<SaveFileEvent>((event, emit) async {
       await GallerySaver.saveImage(state.fileUrl).then((value) {
         emit(ThetaState(
-            message: '',
-            fileUrl: state.fileUrl,
-            cameraState: state.cameraState,
-            finishedSaving: true,
-            inProgress: false));
+          message: '',
+          fileUrl: state.fileUrl,
+          cameraState: state.cameraState,
+          finishedSaving: true,
+        ));
         print('hello');
         print("finished saving ${state.finishedSaving}");
       });
     });
+    on<ImagePickerEvent>((event, emit) async {});
   }
 }

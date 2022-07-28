@@ -39,6 +39,27 @@ class MyApp extends StatelessWidget {
                         ),
                       ],
                     ),
+                    // state.inProgress && state.fileUrl.isEmpty
+                    //     ? Column(
+                    //         children: [
+                    //           CircularProgressIndicator(),
+                    //           Text('Processing Photo')
+                    //         ],
+                    //       )
+                    //     : state.inProgress && state.fileUrl.isNotEmpty
+                    //         ? Column(
+                    //             children: [
+                    //               CircularProgressIndicator(),
+                    //               Text('Saving to Gallery')
+                    //             ],
+                    //           )
+                    //         : state.cameraState == 'done' &&
+                    //                 state.fileUrl.isNotEmpty &&
+                    //                 state.finishedSaving == true
+                    //             ? Container(
+                    //                 child: Text('Image'),
+                    //               )
+                    //             : Container(),
                     state.cameraState == 'done' &&
                             state.fileUrl.isNotEmpty &&
                             state.finishedSaving == true
