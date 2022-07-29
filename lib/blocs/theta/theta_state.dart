@@ -7,21 +7,23 @@ class ThetaState extends Equatable {
   final String cameraState;
   final String id;
   final bool finishedSaving;
-  // final File image;
+  final XFile? images;
 
-  ThetaState({
-    required this.message,
-    this.fileUrl = "",
-    this.cameraState = "initial",
-    this.id = "",
-    this.finishedSaving = false,
-    //instantiate File here
-  });
+  ThetaState(
+      {required this.message,
+      this.fileUrl = "",
+      this.cameraState = "initial",
+      this.id = "",
+      this.finishedSaving = false,
+      this.images
+      //instantiate File here
+      });
 
   factory ThetaState.initial() => ThetaState(message: "Response from Camera");
 
   @override
-  List<Object> get props => [
+  List<dynamic> get props => [
+        images,
         message,
         id,
         cameraState,

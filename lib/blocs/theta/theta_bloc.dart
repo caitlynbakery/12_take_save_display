@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'dart:io';
 import 'dart:math';
 
@@ -7,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
 part 'theta_event.dart';
 part 'theta_state.dart';
@@ -84,6 +84,8 @@ class ThetaBloc extends Bloc<ThetaEvent, ThetaState> {
         print("finished saving ${state.finishedSaving}");
       });
     });
-    on<ImagePickerEvent>((event, emit) async {});
+    on<ImagePickerEvent>((event, emit) async {
+      emit(ThetaState(message: '', images: event.image));
+    });
   }
 }

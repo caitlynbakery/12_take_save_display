@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:take_save_display_12/blocs/theta/theta_bloc.dart';
 
 void main() {
@@ -82,8 +83,14 @@ class MyApp extends StatelessWidget {
                                     ],
                                   ),
                     IconButton(
-                        onPressed: () {
-                          print('image gallery');
+                        onPressed: () async {
+                          final image = await ImagePicker().pickImage(
+                            source: ImageSource.gallery,
+                          );
+                          if (image == null) return;
+                          context
+                              .read<ThetaBloc>()
+                              .add(ImagePickerEvent(image));
                         },
                         icon: Icon(Icons.image))
                   ],
