@@ -2,3 +2,7 @@
 
 ## Resources
 * Theta Concept 6 (checking camera state before moving on)
+
+![diagram](docs/7_27_diagram.png)
+
+![screen](docs/imageappscreen.gif)

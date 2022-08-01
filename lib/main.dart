@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -40,33 +42,10 @@ class MyApp extends StatelessWidget {
                         ),
                       ],
                     ),
-                    // state.inProgress && state.fileUrl.isEmpty
-                    //     ? Column(
-                    //         children: [
-                    //           CircularProgressIndicator(),
-                    //           Text('Processing Photo')
-                    //         ],
-                    //       )
-                    //     : state.inProgress && state.fileUrl.isNotEmpty
-                    //         ? Column(
-                    //             children: [
-                    //               CircularProgressIndicator(),
-                    //               Text('Saving to Gallery')
-                    //             ],
-                    //           )
-                    //         : state.cameraState == 'done' &&
-                    //                 state.fileUrl.isNotEmpty &&
-                    //                 state.finishedSaving == true
-                    //             ? Container(
-                    //                 child: Text('Image'),
-                    //               )
-                    //             : Container(),
                     state.cameraState == 'done' &&
                             state.fileUrl.isNotEmpty &&
                             state.finishedSaving == true
-                        ? Container(
-                            child: Text('Image Here'),
-                          )
+                        ? Container()
                         : state.cameraState == 'initial'
                             ? Container()
                             : state.fileUrl.isNotEmpty
@@ -82,6 +61,12 @@ class MyApp extends StatelessWidget {
                                       Text('Processing Photo')
                                     ],
                                   ),
+                    //  state.cameraState == 'inProgress' && state.fileUrl.isEmpty ? Column(
+                    //                   children: [
+                    //                     CircularProgressIndicator(),
+                    //                     Text('Processing Photo')
+                    //                   ],
+                    //                 ) :
                     IconButton(
                         onPressed: () async {
                           final image = await ImagePicker().pickImage(
@@ -92,7 +77,11 @@ class MyApp extends StatelessWidget {
                               .read<ThetaBloc>()
                               .add(ImagePickerEvent(image));
                         },
-                        icon: Icon(Icons.image))
+                        icon: Icon(Icons.image)),
+
+                    state.images != null
+                        ? Image.file(File(state.images!.path))
+                        : Container()
                   ],
                 ));
           },
