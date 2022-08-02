@@ -1,9 +1,13 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:panorama/panorama.dart';
 import 'package:take_save_display_12/blocs/theta/theta_bloc.dart';
+import 'package:take_save_display_12/screens/full_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +26,7 @@ class MyApp extends StatelessWidget {
             return Scaffold(
                 appBar: AppBar(
                   backgroundColor: Colors.black54,
-                  title: Text("Image App"),
+                  title: const Text("Image App"),
                 ),
                 body: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -32,9 +36,19 @@ class MyApp extends StatelessWidget {
                       children: [
                         IconButton(
                           onPressed: () {
-                            context.read<ThetaBloc>().add(PictureEvent());
+                            if (state.finishedSaving ||
+                                state.cameraState == 'initial') {
+                              context.read<ThetaBloc>().add(PictureEvent());
+                            } else {
+                              const snackBar = SnackBar(
+                                content: Text('Wait for Process to Complete'),
+                                duration: Duration(seconds: 1),
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            }
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.camera_alt,
                             color: Colors.amber,
                           ),
@@ -42,31 +56,22 @@ class MyApp extends StatelessWidget {
                         ),
                       ],
                     ),
-                    state.cameraState == 'done' &&
-                            state.fileUrl.isNotEmpty &&
-                            state.finishedSaving == true
-                        ? Container()
-                        : state.cameraState == 'initial'
-                            ? Container()
-                            : state.fileUrl.isNotEmpty
-                                ? Column(
-                                    children: [
-                                      CircularProgressIndicator(),
-                                      Text('Saving to Gallery')
-                                    ],
-                                  )
-                                : Column(
-                                    children: [
-                                      CircularProgressIndicator(),
-                                      Text('Processing Photo')
-                                    ],
-                                  ),
-                    //  state.cameraState == 'inProgress' && state.fileUrl.isEmpty ? Column(
-                    //                   children: [
-                    //                     CircularProgressIndicator(),
-                    //                     Text('Processing Photo')
-                    //                   ],
-                    //                 ) :
+                    state.cameraState == 'inProgress' && state.fileUrl.isEmpty
+                        ? Column(
+                            children: const [
+                              CircularProgressIndicator(),
+                              Text('Processing Photo'),
+                            ],
+                          )
+                        : state.cameraState == 'done' &&
+                                state.finishedSaving != true
+                            ? Column(
+                                children: const [
+                                  CircularProgressIndicator(),
+                                  Text('Saving to Gallery'),
+                                ],
+                              )
+                            : Container(),
                     IconButton(
                         onPressed: () async {
                           final image = await ImagePicker().pickImage(
@@ -78,15 +83,63 @@ class MyApp extends StatelessWidget {
                               .add(ImagePickerEvent(image));
                         },
                         icon: Icon(Icons.image)),
-
                     state.images != null
-                        ? Image.file(File(state.images!.path))
+                        ? ImageWidget(myFile: File(state.images!.path))
                         : Container()
                   ],
                 ));
           },
         ),
       ),
+    );
+  }
+}
+
+class ImageWidget extends StatelessWidget {
+  File myFile;
+  ImageWidget({Key? key, required this.myFile}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      children: [
+        InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PanoramaWidget(myFile: myFile)));
+              print("changed to new screen");
+            },
+            child: Image.file(myFile)),
+        Icon(
+          Icons.circle,
+          color: Colors.black12,
+          size: 65,
+        ),
+        Icon(
+          Icons.threesixty,
+          color: Colors.white,
+          size: 50,
+        )
+      ],
+    );
+  }
+}
+
+class PanoramaWidget extends StatelessWidget {
+  File myFile;
+  PanoramaWidget({Key? key, required this.myFile}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+          child: Panorama(
+        child: Image.file(myFile),
+      )),
     );
   }
 }

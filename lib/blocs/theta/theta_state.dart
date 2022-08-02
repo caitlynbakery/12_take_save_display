@@ -15,9 +15,7 @@ class ThetaState extends Equatable {
       this.cameraState = "initial",
       this.id = "",
       this.finishedSaving = false,
-      this.images
-      //instantiate File here
-      });
+      this.images});
 
   factory ThetaState.initial() => ThetaState(message: "Response from Camera");
 

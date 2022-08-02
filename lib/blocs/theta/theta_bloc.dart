@@ -23,16 +23,11 @@ class ThetaBloc extends Bloc<ThetaEvent, ThetaState> {
       var id = convertResponse['id'];
 
       if (convertResponse != null && id != null) {
-        emit(state.copyWith(id: id));
-        // emit(ThetaState(message: response.body, id: id));
+        emit(ThetaState(message: response.body, id: id));
         while (state.cameraState != "done") {
           add(CameraStatusEvent());
-
           await Future.delayed(Duration(milliseconds: 200));
           print(state.cameraState);
-          emit(state.copyWith(cameraState: state.cameraState, id: id));
-          // emit(ThetaState(
-          //     message: response.body, id: id, cameraState: state.cameraState));
         }
       }
       add(GetFileEvent());
@@ -46,9 +41,8 @@ class ThetaBloc extends Bloc<ThetaEvent, ThetaState> {
         var response = await http.post(url, headers: header, body: bodyJson);
         var convertResponse = jsonDecode(response.body);
         var cameraState = convertResponse['state'];
-        emit(state.copyWith(id: state.id, cameraState: cameraState));
-        // emit(ThetaState(
-        //     message: response.body, id: state.id, cameraState: cameraState));
+
+        emit(state.copyWith(cameraState: cameraState));
       }
     });
     on<GetFileEvent>((event, emit) async {
@@ -67,27 +61,16 @@ class ThetaBloc extends Bloc<ThetaEvent, ThetaState> {
       var response = await http.post(url, headers: header, body: bodyJson);
       var convertResponse = jsonDecode(response.body);
       var fileUrl = convertResponse['results']['entries'][0]['fileUrl'];
-      emit(ThetaState(
-        message: '',
-        fileUrl: fileUrl,
-        cameraState: state.cameraState,
-      ));
+      emit(state.copyWith(fileUrl: fileUrl));
       add(SaveFileEvent());
     });
     on<SaveFileEvent>((event, emit) async {
       await GallerySaver.saveImage(state.fileUrl).then((value) {
-        emit(ThetaState(
-          message: '',
-          fileUrl: state.fileUrl,
-          cameraState: state.cameraState,
-          finishedSaving: true,
-        ));
-        print('hello');
-        print("finished saving ${state.finishedSaving}");
+        emit(state.copyWith(finishedSaving: true));
       });
     });
     on<ImagePickerEvent>((event, emit) async {
-      emit(ThetaState(message: '', images: event.image));
+      emit(state.copyWith(images: event.image));
     });
   }
 }
