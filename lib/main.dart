@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:panorama/panorama.dart';
 import 'package:take_save_display_12/blocs/theta/theta_bloc.dart';
@@ -113,12 +112,12 @@ class ImageWidget extends StatelessWidget {
               print("changed to new screen");
             },
             child: Image.file(myFile)),
-        Icon(
+        const Icon(
           Icons.circle,
           color: Colors.black12,
           size: 65,
         ),
-        Icon(
+        const Icon(
           Icons.threesixty,
           color: Colors.white,
           size: 50,
