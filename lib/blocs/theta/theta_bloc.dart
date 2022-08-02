@@ -23,14 +23,16 @@ class ThetaBloc extends Bloc<ThetaEvent, ThetaState> {
       var id = convertResponse['id'];
 
       if (convertResponse != null && id != null) {
-        emit(ThetaState(message: response.body, id: id));
+        emit(state.copyWith(id: id));
+        // emit(ThetaState(message: response.body, id: id));
         while (state.cameraState != "done") {
           add(CameraStatusEvent());
 
           await Future.delayed(Duration(milliseconds: 200));
           print(state.cameraState);
-          emit(ThetaState(
-              message: response.body, id: id, cameraState: state.cameraState));
+          emit(state.copyWith(cameraState: state.cameraState, id: id));
+          // emit(ThetaState(
+          //     message: response.body, id: id, cameraState: state.cameraState));
         }
       }
       add(GetFileEvent());
@@ -44,9 +46,9 @@ class ThetaBloc extends Bloc<ThetaEvent, ThetaState> {
         var response = await http.post(url, headers: header, body: bodyJson);
         var convertResponse = jsonDecode(response.body);
         var cameraState = convertResponse['state'];
-
-        emit(ThetaState(
-            message: response.body, id: state.id, cameraState: cameraState));
+        emit(state.copyWith(id: state.id, cameraState: cameraState));
+        // emit(ThetaState(
+        //     message: response.body, id: state.id, cameraState: cameraState));
       }
     });
     on<GetFileEvent>((event, emit) async {

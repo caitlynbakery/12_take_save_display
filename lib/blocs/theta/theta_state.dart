@@ -22,22 +22,27 @@ class ThetaState extends Equatable {
   factory ThetaState.initial() => ThetaState(message: "Response from Camera");
 
   @override
-  List<dynamic> get props => [
-        images,
-        message,
-        id,
-        cameraState,
-        finishedSaving,
-      ];
+  List<dynamic> get props =>
+      [images, message, id, cameraState, finishedSaving, fileUrl];
 
   @override
   bool get stringify => true;
 
   ThetaState copyWith({
     String? message,
+    String? fileUrl,
+    String? cameraState,
+    String? id,
+    bool? finishedSaving,
+    XFile? images,
   }) {
     return ThetaState(
       message: message ?? this.message,
+      fileUrl: fileUrl ?? this.fileUrl,
+      cameraState: cameraState ?? this.cameraState,
+      id: id ?? this.id,
+      finishedSaving: finishedSaving ?? this.finishedSaving,
+      images: images ?? this.images,
     );
   }
 }
