@@ -112,16 +112,21 @@ class ImageWidget extends StatelessWidget {
               print("changed to new screen");
             },
             child: Image.file(myFile)),
-        const Icon(
+        Icon(
           Icons.circle,
           color: Colors.black12,
           size: 65,
         ),
-        const Icon(
-          Icons.threesixty,
-          color: Colors.white,
-          size: 50,
-        )
+        InkWell(
+            child: Icon(
+              Icons.threesixty,
+              color: Colors.white,
+              size: 50,
+            ),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PanoramaWidget(myFile: myFile))))
       ],
     );
   }
