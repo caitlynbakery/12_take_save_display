@@ -41,6 +41,12 @@ dependencies:
   equatable: ^2.0.3
   dio: ^4.0.6
   panorama: ^0.4.1
+  flutter_launcher_icons: ^0.9.3
+
+flutter_icons:
+  image_path: "assets/images/thetatsd.png"
+  android: "launcher_icon"
+  ios: true
 
 dev_dependencies:
   flutter_test:

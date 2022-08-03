@@ -1,49 +1,57 @@
 # 12. Take Save Display 
 
-This project combines concepts from previous tutorials to build a more complex application. 
+A demonstration of using the RICOH THETA X camera with Android and IOS phones.
 
-![diagram](docs/7_27_diagram.png)
-
-A list of the functionalities is listed below:
-
-## Functionalities
+## Features
 
 * Take a picture 
 * Save image to gallery
 * Select image from gallery & display
 * View image in 360 view
 
+![diagram](docs/7_27_diagram.png)
+
 ## Resources
 
-* THETA Concept 3 (taking picture with Bloc management)
-* THETA Concept 6 (checking camera state before moving on)
+This application is built on the tutorials below.
+
+* [THETA Concept 3](https://starter.theta360.guide/03-ricoh-theta-api-app-state-management-with-bloc/) (taking picture with Bloc management)
+* [THETA Concept 6](https://starter.theta360.guide/06-api-commands-in-sequence/) (checking camera state before moving on)
 * THETA Concept 9 (saving image to gallery)
 * THETA Concept 11 (selecting image from gallery)
 
 ![screen](docs/newscreen.gif)
 
-## Bloc Structure
+## Key Flutter Packages 
 
-This project uses the [flutter_bloc](https://pub.dev/packages/flutter_bloc) package to handle State management. Events are associated with every action that occurs. The State holds information in parameters and the main constructor. In the Bloc file, there are `on` methods that handle when every Event is called. 
+* panorama - view 360 image with navigation
+* image_picker - select image from gallery
+* gallery_saver - save image to gallery
+* flutter_bloc - manage state 
 
-Example of the State constructor:
+## View Image in 360
+
+This project uses the panorama package to view the image in 360 view. When the user clicks on the image, the `Navigator.push` displays it in full screen.  
 
 ```dart
-class ThetaState extends Equatable {
-  final String message;
-  final String fileUrl;
-  final String cameraState;
-  final String id;
-  final bool finishedSaving;
-  final XFile? images;
+class PanoramaScreen extends StatefulWidget {
+  File myFile;
+  PanoramaScreen({Key? key, required this.myFile}) : super(key: key);
 
-  ThetaState(
-      {required this.message,
-      this.fileUrl = "",
-      this.cameraState = "initial",
-      this.id = "",
-      this.finishedSaving = false,
-      this.images});}
+  @override
+  State<PanoramaScreen> createState() => _PanoramaScreenState();
+}
+
+class _PanoramaScreenState extends State<PanoramaScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(),
+        body: Center(
+          child: Panorama(child: Image.file(widget.myFile)),
+        ));
+  }
+}
 ```
 
 ## Taking Picture
@@ -144,4 +152,26 @@ class ImagePickerEvent extends ThetaEvent {
 
 When the `IconButton` is pressed, it adds the `ImagePickerEvent` with the file from `ImagePicker`. Inside the Bloc file, the `ImagePickerEvent` updates the State with the file.
 
-## View Image in 360
+## Bloc Structure
+
+This project uses the [flutter_bloc](https://pub.dev/packages/flutter_bloc) package to handle State management. Events are associated with every action that occurs. The State holds information in parameters and the main constructor. In the Bloc file, there are `on` methods that handle when every Event is called. 
+
+Example of the State constructor:
+
+```dart
+class ThetaState extends Equatable {
+  final String message;
+  final String fileUrl;
+  final String cameraState;
+  final String id;
+  final bool finishedSaving;
+  final XFile? images;
+
+  ThetaState(
+      {required this.message,
+      this.fileUrl = "",
+      this.cameraState = "initial",
+      this.id = "",
+      this.finishedSaving = false,
+      this.images});}
+```
