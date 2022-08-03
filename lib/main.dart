@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:panorama/panorama.dart';
 import 'package:take_save_display_12/blocs/theta/theta_bloc.dart';
 import 'package:take_save_display_12/screens/full_screen.dart';
+import 'package:flutter_launcher_icons/main.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,12 +21,13 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (context) => ThetaBloc(),
       child: MaterialApp(
+        color: Colors.white,
         home: BlocBuilder<ThetaBloc, ThetaState>(
           builder: (context, state) {
             return Scaffold(
                 appBar: AppBar(
                   backgroundColor: Colors.black54,
-                  title: const Text("Image App"),
+                  title: const Text("THETA TSD"),
                 ),
                 body: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
